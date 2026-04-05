@@ -8,10 +8,17 @@ const { combine, timestamp, label, printf } = format;
 
 const logFormat = printf(({ level, message, label, timestamp }) => {
   const date = new Date(timestamp as string);
-  const hour = date.getHours();
-  const minutes = date.getMinutes();
-  const seconds = date.getSeconds();
-  return `${date.toDateString()} ${hour}:${minutes}:${seconds} } [${label}] ${level}: ${message}`;
+  // const hour = date.getHours();
+  // const minutes = date.getMinutes();
+  // const seconds = date.getSeconds();
+  const localTime = date.toLocaleString("en-BD", {
+    timeZone: "Asia/Dhaka",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  });
+  return `${date.toDateString()} ${localTime} [${label}] ${level}: ${message}`;
 });
 
 const logger = createLogger({
@@ -25,7 +32,7 @@ const logger = createLogger({
         "logs",
         "winston",
         "successes",
-        "docker-%DATE%-success.log"
+        "docker-%DATE%-success.log",
       ),
       datePattern: "YYYY-MM-DD-HH-mm-ss",
       zippedArchive: false,
@@ -46,7 +53,7 @@ const errorlogger = createLogger({
         "logs",
         "winston",
         "errors",
-        "docker-%DATE%-error.log"
+        "docker-%DATE%-error.log",
       ),
       datePattern: "YYYY-MM-DD-HH",
       zippedArchive: false,

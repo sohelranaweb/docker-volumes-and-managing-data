@@ -13,7 +13,7 @@ const getAllErrorLogs = async (req: Request, res: Response) => {
       .map(
         (file) => `
       <li><a href="/logs/errors/${file}">${file}</a></li>
-    `
+    `,
       )
       .join("");
 
@@ -44,7 +44,7 @@ const getAllSuccessLogs = async (req: Request, res: Response) => {
       .map(
         (file) => `
       <li><a href="/logs/successes/${file}">${file}</a></li>
-    `
+    `,
       )
       .join("");
 
@@ -65,13 +65,13 @@ const getAllSuccessLogs = async (req: Request, res: Response) => {
 };
 
 const getSpecificErrorLog = async (req: Request, res: Response) => {
-  const logfile = req.params.logfile;
+  const logfile = (req.params.logfile as string) || "";
   const logPath = path.join(
     process.cwd(),
     "logs",
     "winston",
     "errors",
-    logfile
+    logfile,
   );
 
   if (fs.existsSync(logPath)) {
@@ -124,13 +124,13 @@ const getSpecificErrorLog = async (req: Request, res: Response) => {
 };
 
 const getSpecificSuccessLog = async (req: Request, res: Response) => {
-  const logfile = req.params.logfile;
+  const logfile = (req.params.logfile as string) || "";
   const logPath = path.join(
     process.cwd(),
     "logs",
     "winston",
     "successes",
-    logfile
+    logfile,
   );
 
   if (fs.existsSync(logPath)) {
