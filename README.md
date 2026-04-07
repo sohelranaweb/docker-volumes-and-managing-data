@@ -297,22 +297,65 @@ docker volume prune
 docker run -p 5000:5000 --name ts-docker-container -v ts-docker-logs://app/logs --rm ts-docker:v2
 ```
 
-## 3-6 Polishing The Bind Mount Command
+## 3-8 Polishing The Bind Mount Command
 
 - For Git Bash
 
 ```shell
-docker run -p 5000:5000 --name ts-container -w //app -v ts-docker-logs://app/logs -v "//$(pwd)"://app/ -v //app/node_modules --rm ts-docker
+docker run -p 5000:5000 --name ts-container -w //app -v ts-docker-logs://app/logs -v "//$(pwd)"://app/ -v //app/node_modules --rm ts-docker:v2
 ```
 
 - For Powershell
 
 ```shell
-docker run -p 5000:5000 --name ts-container -w //app -v ts-docker-logs://app/logs -v "${PWD}://app" -v //app/node_modules --rm ts-docker
+docker run -p 5000:5000 --name ts-container -w //app -v ts-docker-logs://app/logs -v "${PWD}://app" -v //app/node_modules --rm ts-docker:v2
 ```
 
 - For CMD
 
 ```shell
-docker run -p 5000:5000 --name ts-container -w //app -v ts-docker-logs://app/logs -v "%cd%"://app/ -v //app/node_modules --rm ts-docker
+docker run -p 5000:5000 --name ts-container -w //app -v ts-docker-logs://app/logs -v "%cd%"://app/ -v //app/node_modules --rm ts-docker:v2
 ```
+
+## 3-9 Running A Container Directly With VS code
+
+- I’m telling you, to run a container we often write long and complex commands—publishing ports, assigning container names, using named or anonymous volumes, or bind mounts. We try to combine all of these into a single command. But honestly, it’s hard to remember everything. What I usually do is save these commands in Notepad or Notion, and use them when needed. I create a cheet sheet for myself. I’ve already provided you with one, but if you can make your own, that would be even better.
+
+- Now, let’s move to an easier method. Instead of writing such long commands, we can do this with just one click using an extension. For that, we go to the VS Code extension library and named is Dev Containers from Microsoft and install it.
+
+- Next, create a folder named .devcontainer in the project root. Inside it, create a file called devcontainer.json and copy-paste the following code.
+
+- If you get confused, you can follow a video about the Dev Container extension in VS Code.
+
+- For Whole CMD is
+
+```shell
+{
+  "name": "ts-container",
+  "image": "node:20",
+  "workspaceFolder": "/app",
+  "mounts": [
+    // Bind mount for your local project
+    "source=/i/projects/docker/docker-volumes-and-managing-data,target=/app,type=bind",
+
+    // Named volume for logs (similar to: -v ts-docker-logs://app/logs)
+    "source=ts-docker-logs,target=/app/logs,type=volume",
+
+    // Anonymous volume for node_modules (similar to: -v //app/node_modules)
+    "target=/app/node_modules,type=volume"
+  ],
+  "runArgs": [
+    "--name",
+    "ts-container",
+    "-p",
+    "5000:5000",
+    "--rm" // Automatically remove the container after exiting VS Code
+  ],
+  "postCreateCommand": "npm install"
+}
+
+```
+
+- First, delete all images using the command docker image prune -a -f. Now, instead of building the image from the terminal, press Ctrl + Shift + P and select “Dev Containers: Reopen in Container.” After pressing Enter, VS Code will reopen. At that point, you are inside a Linux environment. You will notice that the folder name may change, which means your local machine is now connected to the Linux Docker container. This is docker bind mount. Now, wherever you make changes to the code, those changes will be reflected in both places. This is the beauty of Docker.
+
+## 3-10 Working with .env file & .dockerignore file
