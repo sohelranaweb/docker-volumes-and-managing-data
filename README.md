@@ -296,3 +296,23 @@ docker volume prune
 ```shell
 docker run -p 5000:5000 --name ts-docker-container -v ts-docker-logs://app/logs --rm ts-docker:v2
 ```
+
+## 3-6 Polishing The Bind Mount Command
+
+- For Git Bash
+
+```shell
+docker run -p 5000:5000 --name ts-container -w //app -v ts-docker-logs://app/logs -v "//$(pwd)"://app/ -v //app/node_modules --rm ts-docker
+```
+
+- For Powershell
+
+```shell
+docker run -p 5000:5000 --name ts-container -w //app -v ts-docker-logs://app/logs -v "${PWD}://app" -v //app/node_modules --rm ts-docker
+```
+
+- For CMD
+
+```shell
+docker run -p 5000:5000 --name ts-container -w //app -v ts-docker-logs://app/logs -v "%cd%"://app/ -v //app/node_modules --rm ts-docker
+```

@@ -3,7 +3,6 @@ import path from "path";
 import { LogsRoutes } from "./app/src/modules/Logs/logs.routes";
 import { errorlogger } from "./app/src/shared/logger";
 
-
 const app: Application = express();
 
 // Serve static files like CSS
