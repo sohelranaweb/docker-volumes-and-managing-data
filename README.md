@@ -290,3 +290,9 @@ docker volume prune
 ```
 
 ## 3-6 Getting Started With Bind Mounts
+
+- but we will tell the named volume in docker run command like
+
+```shell
+docker run -p 5000:5000 --name ts-docker-container -v ts-docker-logs://app/logs --rm ts-docker:v2
+```
